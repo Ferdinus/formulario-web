@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Cita</title>
+</head>
+<body>
+
+  <h1>Agendar Cita</h1>
+
+  <form id="formCita">
+    <label for="mascota">Nombre de la mascota:</label>
+    <input type="text" id="mascota" name="mascota" required><br><br>
+
+    <label for="dueno">Nombre del dueño:</label>
+    <input type="text" id="dueno" name="dueno" required><br><br>
+
+    <label for="telefono">Teléfono:</label>
+    <input type="tel" id="telefono" name="telefono" required><br><br>
+
+    <label for="raza">Raza:</label>
+    <input type="text" id="raza" name="raza"><br><br>
+
+    <label for="servicio">Servicio:</label>
+    <input type="text" id="servicio" name="servicio" required><br><br>
+
+    <label for="fecha">Fecha:</label>
+    <input type="date" id="fecha" name="fecha" required><br><br>
+
+    <label for="hora">Hora:</label>
+    <input type="time" id="hora" name="hora" required><br><br>
+
+    <label for="comentario">Comentario:</label>
+    <textarea id="comentario" name="comentario"></textarea><br><br>
+
+    <button type="submit">Confirmar Cita</button>
+  </form>
+
+  <script>
+    // URL del Apps Script
+    const url = 'https://script.google.com/macros/s/AKfycbx9OmVW0LUKLuIiCbN8ZfYxGRLiUMo6g9PF7m1XQhwv-dAT5zQAdi-L9eC8-0W0_l3C/exec';
+
+    // Obtener el formulario
+    const form = document.getElementById('formCita');
+    
+    // Manejar el envío del formulario
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      // Crear un objeto con los datos del formulario
+      const formData = {
+        mascota: document.getElementById('mascota').value,
+        dueno: document.getElementById('dueno').value,
+        telefono: document.getElementById('telefono').value,
+        raza: document.getElementById('raza').value,
+        servicio: document.getElementById('servicio').value,
+        fecha: document.getElementById('fecha').value,
+        hora: document.getElementById('hora').value,
+        comentario: document.getElementById('comentario').value
+      };
+      
+      // Enviar los datos al Apps Script usando fetch()
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'ok') {
+          alert('¡Cita registrada correctamente!');
+          form.reset(); // Resetear el formulario
+        } else {
+          alert('Error: ' + data.message);
+        }
+      })
+      .catch(error => {
+        alert('Error: ' + error.message);
+      });
+    });
+  </script>
+
+</body>
+</html>
